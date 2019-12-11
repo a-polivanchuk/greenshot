@@ -1,0 +1,56 @@
+files:
+  - source: /src/Greenshot/Languages/Help/help-en-US.html
+    translation: /src/Greenshot/Languages/Help/help-%locale%.%file_extension%
+  - source: /src/Greenshot/Languages/Installer/language-installer-en-US.xml
+    translation: >-
+      /src/Greenshot/Languages/Installer/language-installer-%locale%.%file_extension%
+  - source: /src/Greenshot/Languages/Website/language-website-en-US.xml
+    translation: >-
+      /src/Greenshot/Languages/Website/language-website-%locale%.%file_extension%
+  - source: /src/Greenshot/Languages/language-en-US.xml
+    translation: /src/Greenshot/Languages/language-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Box/Languages/language_boxplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Box/Languages/language_boxplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Confluence/Languages/language_confluence-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Confluence/Languages/language_confluence-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Dropbox/Languages/language_dropboxplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Dropbox/Languages/language_dropboxplugin-%locale%.%file_extension%
+  - source: >-
+      /src/Greenshot.Addon.ExternalCommand/Languages/language_externalcommandplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.ExternalCommand/Languages/language_externalcommandplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Flickr/Languages/language_flickrplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Flickr/Languages/language_flickrplugin-%locale%.%file_extension%
+  - source: >-
+      /src/Greenshot.Addon.GooglePhotos/Languages/language_googlephotosplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.GooglePhotos/Languages/language_googlephotosplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Imgur/Languages/language_imgurplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Imgur/Languages/language_imgurplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Jira/Languages/language_jiraplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Jira/Languages/language_jiraplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.LegacyEditor/Languages/language_editor-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.LegacyEditor/Languages/language_editor-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Lutim/Languages/language_lutimplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Lutim/Languages/language_lutimplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Office/Languages/language_officeplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Office/Languages/language_officeplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.OneDrive/Languages/language_onedriveplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.OneDrive/Languages/language_onedriveplugin-%locale%.%file_extension%
+  - source: >-
+      /src/Greenshot.Addon.Photobucket/Languages/language_photobucketplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Photobucket/Languages/language_photobucketplugin-%locale%.%file_extension%
+  - source: /src/Greenshot.Addon.Tfs/Languages/language_tfsplugin-en-US.xml
+    translation: >-
+      /src/Greenshot.Addon.Tfs/Languages/language_tfsplugin-%locale%.%file_extension%
