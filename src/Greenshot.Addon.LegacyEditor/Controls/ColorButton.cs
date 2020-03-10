@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -52,19 +52,15 @@ namespace Greenshot.Addon.LegacyEditor.Controls
 				_selectedColor = value;
 
 				if (Image != null)
-				{
-					using (var brush = value != Color.Transparent ? new SolidBrush(value) : (Brush) new HatchBrush(HatchStyle.Percent50, Color.White, Color.Gray))
-					{
-						using (var graphics = Graphics.FromImage(Image))
-						{
-							int verticalOffset = Image.Height / 3;
-							int horizontalOffset = (Image.Width / 3) / 2;
-							int width = Image.Width - (Image.Width / 3);
-							int height = (Image.Height / 3) / 2;
-							graphics.FillRectangle(brush, new Rectangle(horizontalOffset, verticalOffset, width, height));
-						}
-					}
-				}
+                {
+                    using var brush = value != Color.Transparent ? new SolidBrush(value) : (Brush) new HatchBrush(HatchStyle.Percent50, Color.White, Color.Gray);
+                    using var graphics = Graphics.FromImage(Image);
+                    int verticalOffset = Image.Height / 3;
+                    int horizontalOffset = (Image.Width / 3) / 2;
+                    int width = Image.Width - (Image.Width / 3);
+                    int height = (Image.Height / 3) / 2;
+                    graphics.FillRectangle(brush, new Rectangle(horizontalOffset, verticalOffset, width, height));
+                }
 				Invalidate();
 			}
 		}
@@ -77,24 +73,22 @@ namespace Greenshot.Addon.LegacyEditor.Controls
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private void ColorButtonClick(object sender, EventArgs e)
-		{
-            using (var ownedColorDialog = _colorDialogFactory())
+        {
+            using var ownedColorDialog = _colorDialogFactory();
+            var colorDialog = ownedColorDialog.Value;
+            colorDialog.Color = SelectedColor;
+            // Using the parent to make sure the dialog doesn't show on another window
+            colorDialog.ShowDialog(Parent.Parent);
+            if (colorDialog.DialogResult == DialogResult.Cancel)
             {
-                var colorDialog = ownedColorDialog.Value;
-                colorDialog.Color = SelectedColor;
-                // Using the parent to make sure the dialog doesn't show on another window
-                colorDialog.ShowDialog(Parent.Parent);
-                if (colorDialog.DialogResult == DialogResult.Cancel)
-                {
-                    return;
-                }
-                if (colorDialog.Color.Equals(SelectedColor))
-                {
-                    return;
-                }
-                SelectedColor = colorDialog.Color;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedColor"));
+                return;
             }
-		}
+            if (colorDialog.Color.Equals(SelectedColor))
+            {
+                return;
+            }
+            SelectedColor = colorDialog.Color;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedColor"));
+        }
 	}
 }

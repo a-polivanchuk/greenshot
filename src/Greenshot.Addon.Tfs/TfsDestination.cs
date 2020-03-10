@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2018 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -165,10 +165,8 @@ namespace Greenshot.Addon.Tfs
             get
             {
                 // TODO: Optimize this by using a cache
-                using (var bitmapStream = _resourceProvider.ResourceAsStream(GetType().Assembly, "vsts.png"))
-                {
-                    return BitmapHelper.FromStream(bitmapStream);
-                }
+                using var bitmapStream = _resourceProvider.ResourceAsStream(GetType().Assembly, "vsts.png");
+                return BitmapHelper.FromStream(bitmapStream);
             }
         }
 
@@ -224,11 +222,9 @@ namespace Greenshot.Addon.Tfs
 
                 if (_tfsConfiguration.AfterUploadLinkToClipBoard)
                 {
-                    using (var clipboardAccessToken = ClipboardNative.Access())
-                    {
-                        clipboardAccessToken.ClearContents();
-                        clipboardAccessToken.SetAsUrl(response.AbsoluteUri);
-                    }
+                    using var clipboardAccessToken = ClipboardNative.Access();
+                    clipboardAccessToken.ClearContents();
+                    clipboardAccessToken.SetAsUrl(response.AbsoluteUri);
                 }
 
                 return response;

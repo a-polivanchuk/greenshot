@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2018 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -120,10 +120,8 @@ namespace Greenshot.Addon.Imgur.ViewModels
         /// </summary>
         public void ShowHistory()
         {
-            using (var imgurHistoryViewModel = ImgurHistoryViewModelFactory())
-            {
-                WindowManager.ShowDialog(imgurHistoryViewModel.Value);
-            }
+            using var imgurHistoryViewModel = ImgurHistoryViewModelFactory();
+            WindowManager.ShowDialog(imgurHistoryViewModel.Value);
         }
 
         /// <summary>

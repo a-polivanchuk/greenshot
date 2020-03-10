@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -112,17 +112,17 @@ namespace Greenshot.Addons.ViewModels
         /// </summary>
         public void SelectOutputPath()
         {
-            using (var folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog())
+            using var folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog
             {
-                // Get the storage location and replace the environment variables
-                folderBrowserDialog.SelectedPath = FilenameHelper.FillVariables(CoreConfiguration.OutputFilePath, false);
-                if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                SelectedPath = FilenameHelper.FillVariables(CoreConfiguration.OutputFilePath, false)
+            };
+            // Get the storage location and replace the environment variables
+            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                // Only change if there is a change, otherwise we might overwrite the environment variables
+                if (folderBrowserDialog.SelectedPath != null && !folderBrowserDialog.SelectedPath.Equals(FilenameHelper.FillVariables(CoreConfiguration.OutputFilePath, false)))
                 {
-                    // Only change if there is a change, otherwise we might overwrite the environment variables
-                    if (folderBrowserDialog.SelectedPath != null && !folderBrowserDialog.SelectedPath.Equals(FilenameHelper.FillVariables(CoreConfiguration.OutputFilePath, false)))
-                    {
-                        CoreConfiguration.OutputFilePath = folderBrowserDialog.SelectedPath;
-                    }
+                    CoreConfiguration.OutputFilePath = folderBrowserDialog.SelectedPath;
                 }
             }
         }

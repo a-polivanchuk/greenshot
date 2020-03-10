@@ -1,5 +1,5 @@
 // Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -437,7 +437,7 @@ namespace Greenshot.Forms
 
         private void CaptureFile()
         {
-            var openFileDialog = new OpenFileDialog
+            using var openFileDialog = new OpenFileDialog
             {
                 Filter = "Image files (*.greenshot, *.png, *.jpg, *.gif, *.bmp, *.ico, *.tiff, *.wmf)|*.greenshot; *.png; *.jpg; *.jpeg; *.gif; *.bmp; *.ico; *.tiff; *.tif; *.wmf"
             };
@@ -851,10 +851,8 @@ namespace Greenshot.Forms
 
         public void ShowAbout()
         {
-            using (var aboutForm = _aboutFormFactory())
-            {
-                aboutForm.Value.ShowDialog(this);
-            }
+            using var aboutForm = _aboutFormFactory();
+            aboutForm.Value.ShowDialog(this);
         }
 
         /// <summary>

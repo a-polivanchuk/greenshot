@@ -1,24 +1,21 @@
-// Dapplo - building blocks for desktop applications
-// Copyright (C) 2019 Dapplo
+// Greenshot - a free and open source screenshot tool
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
-// For more information see: http://dapplo.net/
-// Dapplo repositories are hosted on GitHub: https://github.com/dapplo
+// For more information see: http://getgreenshot.org/
+// The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
 // 
-// This file is part of Greenshot
-// 
-// Greenshot is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 1 of the License, or
 // (at your option) any later version.
 // 
-// Greenshot is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
+// GNU General Public License for more details.
 // 
-// You should have a copy of the GNU Lesser General Public License
-// along with Greenshot. If not, see <http://www.gnu.org/licenses/lgpl.txt>.
-// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Greenshot.Gfx.Structs;
 
@@ -34,35 +31,25 @@ namespace Greenshot.Gfx.Extensions
         /// </summary>
         /// <param name="bitmap">IBitmapWithNativeSupport</param>
         /// <returns>IBitmapWithNativeSupport</returns>
-        public static IBitmapWithNativeSupport Scale2X(this IBitmapWithNativeSupport bitmap)
-        {
-            switch (bitmap)
+        public static IBitmapWithNativeSupport Scale2X(this IBitmapWithNativeSupport bitmap) =>
+            bitmap switch
             {
-                case UnmanagedBitmap<Bgra32> unmanagedBitmap:
-                    return unmanagedBitmap.Scale2X();
-                case UnmanagedBitmap<Bgr32> unmanagedBitmap:
-                    return unmanagedBitmap.Scale2X();
-            }
+                UnmanagedBitmap<Bgra32> unmanagedBitmap => unmanagedBitmap.Scale2X(),
+                UnmanagedBitmap<Bgr32> unmanagedBitmap => unmanagedBitmap.Scale2X(),
+                _ => ScaleX.Scale2X(bitmap)
+            };
 
-            return ScaleX.Scale2X(bitmap);
-        }
-        
         /// <summary>
         /// Scale3x
         /// </summary>
         /// <param name="bitmap">IBitmapWithNativeSupport</param>
         /// <returns>IBitmapWithNativeSupport</returns>
-        public static IBitmapWithNativeSupport Scale3X(this IBitmapWithNativeSupport bitmap)
-        {
-            switch (bitmap)
+        public static IBitmapWithNativeSupport Scale3X(this IBitmapWithNativeSupport bitmap) =>
+            bitmap switch
             {
-                case UnmanagedBitmap<Bgra32> unmanagedBitmap:
-                    return unmanagedBitmap.Scale3X();
-                case UnmanagedBitmap<Bgr32> unmanagedBitmap:
-                    return unmanagedBitmap.Scale3X();
-            }
-
-            return ScaleX.Scale3X(bitmap);
-        }
+                UnmanagedBitmap<Bgra32> unmanagedBitmap => unmanagedBitmap.Scale3X(),
+                UnmanagedBitmap<Bgr32> unmanagedBitmap => unmanagedBitmap.Scale3X(),
+                _ => ScaleX.Scale3X(bitmap)
+            };
     }
 }

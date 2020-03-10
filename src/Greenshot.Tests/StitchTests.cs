@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -18,6 +18,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Drawing.Imaging;
+using System.IO;
 using Greenshot.Gfx;
 using Greenshot.Gfx.Formats;
 using Greenshot.Gfx.Stitching;
@@ -35,20 +36,19 @@ namespace Greenshot.Tests
         [Fact]
         public void BitmapStitcher_Default()
         {
-            using (var bitmapStitcher = new BitmapStitcher())
-            {
-                bitmapStitcher
-                    .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll0.png"))
-                    .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll35.png"))
-                    .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll70.png"))
-                    .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll105.png"))
-                    .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll124.png"));
+            using var bitmapStitcher = new BitmapStitcher();
+            bitmapStitcher
+                .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll0.png"))
+                .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll35.png"))
+                .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll70.png"))
+                .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll105.png"))
+                .AddBitmap(BitmapHelper.LoadBitmap(@"TestFiles\scroll124.png"));
 
-                using (var completedBitmap = bitmapStitcher.Result())
-                {
-                    completedBitmap.NativeBitmap.Save("scroll.png", ImageFormat.Png);
-                }
-            }
+            using var completedBitmap = bitmapStitcher.Result();
+            completedBitmap.NativeBitmap.Save("scroll.png", ImageFormat.Png);
+            FileAssert.AreEqual(@"TestFiles\scroll-result.png", "scroll.png");
+
+            File.Delete("scroll.png");
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -33,19 +33,16 @@ namespace Greenshot.Tests
         [Fact]
         public void Test_WuQuantizer()
         {
-            using (var bitmap = BitmapFactory.CreateEmpty(400, 400, PixelFormat.Format24bppRgb, Color.White))
+            using var bitmap = BitmapFactory.CreateEmpty(400, 400, PixelFormat.Format24bppRgb, Color.White);
+            using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
             {
-                using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
-                using (var pen = new SolidBrush(Color.Blue))
-                {
-                    graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
-                }
-                var quantizer = new WuQuantizer(bitmap);
-                using (var quantizedImage = quantizer.GetQuantizedImage())
-                {
-                    quantizedImage.NativeBitmap.Save(@"quantized.png", ImageFormat.Png);
-                }
+                using var pen = new SolidBrush(Color.Blue);
+                graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
             }
+
+            var quantizer = new WuQuantizer(bitmap);
+            using var quantizedImage = quantizer.GetQuantizedImage();
+            quantizedImage.NativeBitmap.Save(@"quantized.png", ImageFormat.Png);
         }
     }
 }

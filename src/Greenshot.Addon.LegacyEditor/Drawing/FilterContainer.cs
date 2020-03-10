@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -85,24 +85,20 @@ namespace Greenshot.Addon.LegacyEditor.Drawing
 					var steps = 5;
 					var currentStep = lineVisible ? 1 : 0;
 					while (currentStep <= steps)
-					{
-						using (var shadowPen = new Pen(Color.FromArgb(alpha, 100, 100, 100), lineThickness))
-						{
-							var shadowRect = new NativeRect(Left + currentStep, Top + currentStep, Width, Height).Normalize();
-							graphics.DrawRectangle(shadowPen, shadowRect);
-							currentStep++;
-							alpha = alpha - baseAlpha / steps;
-						}
-					}
+                    {
+                        using var shadowPen = new Pen(Color.FromArgb(alpha, 100, 100, 100), lineThickness);
+                        var shadowRect = new NativeRect(Left + currentStep, Top + currentStep, Width, Height).Normalize();
+                        graphics.DrawRectangle(shadowPen, shadowRect);
+                        currentStep++;
+                        alpha = alpha - baseAlpha / steps;
+                    }
 				}
 				var rect = new NativeRect(Left, Top, Width, Height).Normalize();
 				if (lineThickness > 0)
-				{
-					using (var pen = new Pen(lineColor, lineThickness))
-					{
-						graphics.DrawRectangle(pen, rect);
-					}
-				}
+                {
+                    using var pen = new Pen(lineColor, lineThickness);
+                    graphics.DrawRectangle(pen, rect);
+                }
 			}
 		}
 	}

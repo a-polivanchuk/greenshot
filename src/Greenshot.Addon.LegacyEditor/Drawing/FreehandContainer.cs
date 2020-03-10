@@ -1,20 +1,20 @@
 ﻿/*
  * Greenshot - a free and open source screenshot tool
- * Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
- * 
+ * Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
+ *
  * For more information see: http://getgreenshot.org/
  * The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 1 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,7 +35,7 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
 	/// <summary>
 	/// Description of PathContainer.
 	/// </summary>
-	[Serializable] 
+	[Serializable]
 	public class FreehandContainer : DrawableContainer {
 		private static readonly float [] PointOffset = {0.5f, 0.25f, 0.75f};
 
@@ -47,7 +47,7 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
         [NonSerialized]
         private GraphicsPath _freehandPath = new GraphicsPath();
 		private bool _isRecalculated;
-		
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -65,13 +65,13 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
 
 		public override void Transform(Matrix matrix)
 		{
-		    var newPoints = _capturePoints.Cast<PointF>().ToArray();
+		    var newPoints = _capturePoints.ConvertAll<PointF>(p => p).ToArray();
             matrix.TransformPoints(newPoints);
 			_capturePoints.Clear();
-			_capturePoints.AddRange(newPoints.Cast<NativePointFloat>());
+			_capturePoints.AddRange(newPoints.Select(p => (NativePointFloat)p));
 			RecalculatePath();
 		}
-		
+
 		protected override void OnDeserialized(StreamingContext context) {
 			RecalculatePath();
 		}
@@ -88,7 +88,7 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
 			}
 			_freehandPath = null;
 		}
-		
+
 		/// <summary>
 		/// Called from Surface (the parent) when the drawing begins (mouse-down)
 		/// </summary>
@@ -137,7 +137,7 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
 			}
 			RecalculatePath();
 		}
-		
+
 		/// <summary>
 		/// Here we recalculate the freehand path by smoothing out the lines with Beziers.
 		/// </summary>
@@ -158,7 +158,7 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
 		                // duplicate points, first at 50% than 25% than 75%
 		                _capturePoints.Insert((int)(_capturePoints.Count * PointOffset[index]), _capturePoints[(int)(_capturePoints.Count * PointOffset[index++])]);
 		            }
-		            _freehandPath.AddBeziers(_capturePoints.Cast<PointF>().ToArray());
+		            _freehandPath.AddBeziers(_capturePoints.ConvertAll<PointF>(p => p).ToArray());
 		        }
 		        else if (_capturePoints.Count == 2)
 		        {
@@ -183,34 +183,32 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
 			graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 			graphics.CompositingQuality = CompositingQuality.HighQuality;
 			graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			
+
 			int lineThickness = GetFieldValueAsInt(FieldTypes.LINE_THICKNESS);
 			var lineColor = GetFieldValueAsColor(FieldTypes.LINE_COLOR);
-			using (var pen = new Pen(lineColor)) {
-				pen.Width = lineThickness;
-			    if (!(pen.Width > 0))
-			    {
-			        return;
-			    }
-			    // Make sure the lines are nicely rounded
-			    pen.EndCap = LineCap.Round;
-			    pen.StartCap = LineCap.Round;
-			    pen.LineJoin = LineJoin.Round;
-			    // Move to where we need to draw
-			    graphics.TranslateTransform(Left, Top);
-			    lock (_freehandPathLock)
-			    {
-			        if (_isRecalculated && Selected && renderMode == RenderMode.Edit)
-			        {
-			            DrawSelectionBorder(graphics, pen, _freehandPath);
-			        }
-			        graphics.DrawPath(pen, _freehandPath);
-			    }
+            using var pen = new Pen(lineColor) {Width = lineThickness};
+            if (!(pen.Width > 0))
+            {
+                return;
+            }
+            // Make sure the lines are nicely rounded
+            pen.EndCap = LineCap.Round;
+            pen.StartCap = LineCap.Round;
+            pen.LineJoin = LineJoin.Round;
+            // Move to where we need to draw
+            graphics.TranslateTransform(Left, Top);
+            lock (_freehandPathLock)
+            {
+                if (_isRecalculated && Selected && renderMode == RenderMode.Edit)
+                {
+                    DrawSelectionBorder(graphics, pen, _freehandPath);
+                }
+                graphics.DrawPath(pen, _freehandPath);
+            }
 
-                // Move back, otherwise everything is shifted
-                graphics.TranslateTransform(-Left,-Top);
-			}
-		}
+            // Move back, otherwise everything is shifted
+            graphics.TranslateTransform(-Left,-Top);
+        }
 
         /// <summary>
         /// Draw a selectionborder around the freehand path
@@ -218,21 +216,20 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
         /// <param name="graphics">Graphics</param>
         /// <param name="linePen">Pen</param>
         /// <param name="path">GraphicsPath</param>
-        protected static void DrawSelectionBorder(Graphics graphics, Pen linePen, GraphicsPath path) {
-			using (var selectionPen = (Pen) linePen.Clone()) {
-				using (var selectionPath = (GraphicsPath)path.Clone()) {
-					selectionPen.Width += 5;
-					selectionPen.Color = Color.FromArgb(120, Color.LightSeaGreen);
-					graphics.DrawPath(selectionPen, selectionPath);
-					selectionPath.Widen(selectionPen);
-					selectionPen.DashPattern = new float[]{2,2};
-					selectionPen.Color = Color.LightSeaGreen;
-					selectionPen.Width = 1;
-					graphics.DrawPath(selectionPen, selectionPath);
-				}
-			}
-		}
-		
+        protected static void DrawSelectionBorder(Graphics graphics, Pen linePen, GraphicsPath path)
+        {
+            using var selectionPen = (Pen) linePen.Clone();
+            using var selectionPath = (GraphicsPath)path.Clone();
+            selectionPen.Width += 5;
+            selectionPen.Color = Color.FromArgb(120, Color.LightSeaGreen);
+            graphics.DrawPath(selectionPen, selectionPath);
+            selectionPath.Widen(selectionPen);
+            selectionPen.DashPattern = new float[]{2,2};
+            selectionPen.Color = Color.LightSeaGreen;
+            selectionPen.Width = 1;
+            graphics.DrawPath(selectionPen, selectionPath);
+        }
+
 		/// <summary>
 		/// Get the bounds in which we have something drawn, plus safety margin, these are not the normal bounds...
 		/// </summary>
@@ -276,14 +273,12 @@ namespace Greenshot.Addon.LegacyEditor.Drawing {
 			bool returnValue = base.ClickableAt(x, y);
 			if (returnValue) {
 				int lineThickness = GetFieldValueAsInt(FieldTypes.LINE_THICKNESS);
-				using (var pen = new Pen(Color.White)) {
-					pen.Width = lineThickness + 10;
-				    lock (_freehandPathLock)
-				    {
-				        returnValue = _freehandPath.IsOutlineVisible(x - Left, y - Top, pen);
-                    }
+                using var pen = new Pen(Color.White) {Width = lineThickness + 10};
+                lock (_freehandPathLock)
+                {
+                    returnValue = _freehandPath.IsOutlineVisible(x - Left, y - Top, pen);
                 }
-			}
+            }
 			return returnValue;
 		}
 	}

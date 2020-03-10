@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2018 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -145,21 +145,17 @@ namespace Greenshot.Addon.Tfs
 
             var filename = surface.GenerateFilename(_coreConfiguration, _tfsConfiguration);
             var attachmentUri = apiUri.AppendSegments("wit", "attachments").ExtendQuery("fileName", filename);
-            using (var imageStream = new MemoryStream())
+            using var imageStream = new MemoryStream();
+            surface.WriteToStream(imageStream, _coreConfiguration, _tfsConfiguration);
+            imageStream.Position = 0;
+            using var content = new StreamContent(imageStream);
+            content.SetContentType("application/octet-stream");
+            var createAttachmentresult = await client.PostAsync<HttpResponse<CreateAttachmentResult, string>>(attachmentUri, content).ConfigureAwait(false);
+            if (createAttachmentresult.HasError)
             {
-                surface.WriteToStream(imageStream, _coreConfiguration, _tfsConfiguration);
-                imageStream.Position = 0;
-                using (var content = new StreamContent(imageStream))
-                {
-                    content.SetContentType("application/octet-stream");
-                    var createAttachmentresult = await client.PostAsync<HttpResponse<CreateAttachmentResult, string>>(attachmentUri, content).ConfigureAwait(false);
-                    if (createAttachmentresult.HasError)
-                    {
-                        throw new Exception(createAttachmentresult.ErrorResponse);
-                    }
-                    return createAttachmentresult.Response;
-                }
+                throw new Exception(createAttachmentresult.ErrorResponse);
             }
+            return createAttachmentresult.Response;
         }
 
         /// <summary>

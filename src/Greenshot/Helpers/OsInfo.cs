@@ -1,23 +1,21 @@
-// Dapplo - building blocks for desktop applications
-// Copyright (C) 2019 Dapplo
+// Greenshot - a free and open source screenshot tool
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
-// For more information see: http://dapplo.net/
-// Dapplo repositories are hosted on GitHub: https://github.com/dapplo
+// For more information see: http://getgreenshot.org/
+// The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
 // 
-// This file is part of Greenshot
-// 
-// Greenshot is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 1 of the License, or
 // (at your option) any later version.
 // 
-// Greenshot is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
+// GNU General Public License for more details.
 // 
-// You should have a copy of the GNU Lesser General Public License
-// along with Greenshot. If not, see <http://www.gnu.org/licenses/lgpl.txt>.
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.ComponentModel;
@@ -260,38 +258,22 @@ namespace Greenshot.Helpers
                                         name = "Windows 2000";
                                         break;
                                     case 1:
-                                        switch (suiteMask)
+                                        name = suiteMask switch
                                         {
-                                            case WindowsSuites.Personal:
-                                                name = "Windows XP Professional";
-                                                break;
-                                            default:
-                                                name = "Windows XP";
-                                                break;
-                                        }
+                                            WindowsSuites.Personal => "Windows XP Professional",
+                                            _ => "Windows XP"
+                                        };
                                         break;
                                     case 2:
-                                        switch (suiteMask)
+                                        name = suiteMask switch
                                         {
-                                            case WindowsSuites.Personal:
-                                                name = "Windows XP Professional x64";
-                                                break;
-                                            case WindowsSuites.Enterprise:
-                                                name = "Windows Server 2003 Enterprise";
-                                                break;
-                                            case WindowsSuites.DataCenter:
-                                                name = "Windows Server 2003 Data Center";
-                                                break;
-                                            case WindowsSuites.Blade:
-                                                name = "Windows Server 2003 Web Edition";
-                                                break;
-                                            case WindowsSuites.WHServer:
-                                                name = "Windows Home Server";
-                                                break;
-                                            default:
-                                                name = "Windows Server 2003";
-                                                break;
-                                        }
+                                            WindowsSuites.Personal => "Windows XP Professional x64",
+                                            WindowsSuites.Enterprise => "Windows Server 2003 Enterprise",
+                                            WindowsSuites.DataCenter => "Windows Server 2003 Data Center",
+                                            WindowsSuites.Blade => "Windows Server 2003 Web Edition",
+                                            WindowsSuites.WHServer => "Windows Home Server",
+                                            _ => "Windows Server 2003"
+                                        };
                                         break;
                                 }
                                 break;
@@ -299,26 +281,18 @@ namespace Greenshot.Helpers
                                 switch (minorVersion)
                                 {
                                     case 0:
-                                        switch (productType)
+                                        name = productType switch
                                         {
-                                            case WindowsProductTypes.VER_NT_SERVER:
-                                                name = "Windows Server 2008";
-                                                break;
-                                            default:
-                                                name = "Windows Vista";
-                                                break;
-                                        }
+                                            WindowsProductTypes.VER_NT_SERVER => "Windows Server 2008",
+                                            _ => "Windows Vista"
+                                        };
                                         break;
                                     case 1:
-                                        switch (productType)
+                                        name = productType switch
                                         {
-                                            case WindowsProductTypes.VER_NT_SERVER:
-                                                name = "Windows Server 2008 R2";
-                                                break;
-                                            default:
-                                                name = "Windows 7";
-                                                break;
-                                        }
+                                            WindowsProductTypes.VER_NT_SERVER => "Windows Server 2008 R2",
+                                            _ => "Windows 7"
+                                        };
                                         break;
                                     case 2:
                                         name = "Windows 8";

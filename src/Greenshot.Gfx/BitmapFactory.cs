@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -171,22 +171,20 @@ namespace Greenshot.Gfx
                 // Make sure both images have the same resolution
                 newImage.SetResolution(sourceBitmap.HorizontalResolution, sourceBitmap.VerticalResolution);
 
-                using (var graphics = Graphics.FromImage(newImage))
+                using var graphics = Graphics.FromImage(newImage);
+                if (fromTransparentToNon)
                 {
-                    if (fromTransparentToNon)
-                    {
-                        // Rule 2: Make sure the background color is white
-                        graphics.Clear(Color.White);
-                    }
-                    // decide fastest copy method
-                    if (isAreaEqual)
-                    {
-                        graphics.DrawImageUnscaled(sourceBitmap.NativeBitmap, 0, 0);
-                    }
-                    else
-                    {
-                        graphics.DrawImage(sourceBitmap.NativeBitmap, 0, 0, sourceRect, GraphicsUnit.Pixel);
-                    }
+                    // Rule 2: Make sure the background color is white
+                    graphics.Clear(Color.White);
+                }
+                // decide fastest copy method
+                if (isAreaEqual)
+                {
+                    graphics.DrawImageUnscaled(sourceBitmap.NativeBitmap, 0, 0);
+                }
+                else
+                {
+                    graphics.DrawImage(sourceBitmap.NativeBitmap, 0, 0, sourceRect, GraphicsUnit.Pixel);
                 }
             }
             else

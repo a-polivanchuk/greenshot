@@ -1,5 +1,5 @@
 // Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -67,19 +67,14 @@ namespace Greenshot.Addons.Animation
 		/// </summary>
 		protected double EasingValue
 		{
-			get
-			{
-				switch (EasingMode)
-				{
-					case EasingModes.EaseOut:
-						return Easing.EaseOut(CurrentFrameNr / (double) Frames, EasingType);
-					case EasingModes.EaseInOut:
-						return Easing.EaseInOut(CurrentFrameNr / (double) Frames, EasingType);
-					default:
-						return Easing.EaseIn(CurrentFrameNr / (double) Frames, EasingType);
-				}
-			}
-		}
+			get =>
+                EasingMode switch
+                {
+                    EasingModes.EaseOut => Easing.EaseOut(CurrentFrameNr / (double) Frames, EasingType),
+                    EasingModes.EaseInOut => Easing.EaseInOut(CurrentFrameNr / (double) Frames, EasingType),
+                    _ => Easing.EaseIn(CurrentFrameNr / (double) Frames, EasingType)
+                };
+        }
 
 		/// <summary>
 		///     Final animation value, this is including the legs

@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -52,13 +52,11 @@ namespace Greenshot.Addons.Core
 			}
 
 			IFormatter formatter = new BinaryFormatter();
-			using (var stream = new MemoryStream())
-			{
-				formatter.Serialize(stream, source);
-				stream.Seek(0, SeekOrigin.Begin);
-				return (T) formatter.Deserialize(stream);
-			}
-		}
+            using var stream = new MemoryStream();
+            formatter.Serialize(stream, source);
+            stream.Seek(0, SeekOrigin.Begin);
+            return (T) formatter.Deserialize(stream);
+        }
 
 		/// <summary>
 		///     Clone the content from source to destination

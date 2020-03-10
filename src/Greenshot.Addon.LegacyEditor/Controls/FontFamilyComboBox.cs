@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -116,17 +116,12 @@ namespace Greenshot.Addon.LegacyEditor.Controls
 		/// <param name="bounds"></param>
 		/// <param name="text"></param>
 		private void DrawText(Graphics graphics, FontFamily fontFamily, FontStyle fontStyle, Rectangle bounds, string text)
-		{
-			using (var font = new Font(fontFamily, Font.Size + 5, fontStyle, GraphicsUnit.Pixel))
-			{
-				// Make sure the text is visible by centering it in the line
-				using (var stringFormat = new StringFormat())
-				{
-					stringFormat.LineAlignment = StringAlignment.Center;
-					graphics.DrawString(text, font, Brushes.Black, bounds, stringFormat);
-				}
-			}
-		}
+        {
+            using var font = new Font(fontFamily, Font.Size + 5, fontStyle, GraphicsUnit.Pixel);
+            // Make sure the text is visible by centering it in the line
+            using var stringFormat = new StringFormat {LineAlignment = StringAlignment.Center};
+            graphics.DrawString(text, font, Brushes.Black, bounds, stringFormat);
+        }
 
 		private void BindableToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{

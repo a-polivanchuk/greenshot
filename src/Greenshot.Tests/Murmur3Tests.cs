@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -17,6 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Text;
 using Greenshot.Gfx;
 using Greenshot.Tests.Extensions;
@@ -29,35 +30,16 @@ namespace Greenshot.Tests
     /// </summary>
     public class Murmur3Tests
     {
+        private static readonly uint Seed = 0x9747b28c;
+        private static readonly string TestString = "The quick brown fox jumps over the lazy dog";
+        
         [Fact]
-        public void Murmur3_basic1_Test()
+        public void Murmur3_Test()
         {
-            var hash = TestHash("Hello, world!", 1234);
-            Assert.Equal(0xfaf6cdb3u, hash);
-        }
-
-        [Fact]
-        public void Murmur3_basic2_Test()
-        {
-            var hash = TestHash("The quick brown fox jumps over the lazy dog", 0x9747b28c);
+            var murmur3Span = new Murmur3(Seed);
+            var testBytes = Encoding.UTF8.GetBytes(TestString);
+            var hash = murmur3Span.CalculateHash(testBytes.AsSpan());
             Assert.Equal(0x2FA826CDu, hash);
-            hash = TestHash2("The quick brown fox jumps over the lazy dog", 0x9747b28c);
-            Assert.Equal(0x2FA826CDu, hash);
-        }
-
-        private uint TestHash(string testString, uint seed)
-        {
-            var hashAlgoritm = new Murmur3(seed);
-            var testBytes = Encoding.UTF8.GetBytes(testString);
-            var hash = hashAlgoritm.ComputeHash(testBytes);
-            return hash.ToUInt32();
-        }
-
-        private uint TestHash2(string testString, uint seed)
-        {
-            var hashAlgoritm = new Murmur3(seed);
-            var testBytes = Encoding.UTF8.GetBytes(testString);
-            return hashAlgoritm.GenerateHash(testBytes);
         }
     }
 }

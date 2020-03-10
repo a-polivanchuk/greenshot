@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -36,10 +36,8 @@ namespace Greenshot.Gfx
         public static void ApplyBoxBlur(this IBitmapWithNativeSupport destinationBitmap, int range)
         {
             // We only need one fastbitmap as we use it as source and target (the reading is done for one line H/V, writing after "parsing" one line H/V)
-            using (var fastBitmap = FastBitmapFactory.Create(destinationBitmap))
-            {
-                fastBitmap.ApplyBoxBlur(range);
-            }
+            using var fastBitmap = FastBitmapFactory.Create(destinationBitmap);
+            fastBitmap.ApplyBoxBlur(range);
         }
 
         /// <summary>

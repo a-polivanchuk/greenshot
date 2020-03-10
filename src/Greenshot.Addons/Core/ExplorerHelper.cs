@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -67,12 +67,10 @@ namespace Greenshot.Addons.Core
                         UseShellExecute = true
                     };
 					// Start the explorer process and select the file
-					using (var explorer = Process.Start(processStartInfo))
-					{
-						explorer?.WaitForInputIdle(500);
-						return true;
-					}
-				}
+                    using var explorer = Process.Start(processStartInfo);
+                    explorer?.WaitForInputIdle(500);
+                    return true;
+                }
 			}
 			catch (Exception ex)
 			{

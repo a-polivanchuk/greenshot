@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2018 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -185,12 +185,10 @@ namespace Greenshot.Addon.Photobucket
         public override IBitmapWithNativeSupport DisplayIcon
 		{
 			get
-			{
+            {
                 // TODO: Optimize this
-			    using (var bitmapStream = _resourceProvider.ResourceAsStream(GetType().Assembly, "photobucket-logo.png"))
-			    {
-			        return BitmapHelper.FromStream(bitmapStream);
-			    }
+                using var bitmapStream = _resourceProvider.ResourceAsStream(GetType().Assembly, "photobucket-logo.png");
+                return BitmapHelper.FromStream(bitmapStream);
             }
 		}
 
@@ -295,28 +293,26 @@ namespace Greenshot.Addon.Photobucket
             {
                 surfaceToUpload.WriteToStream(imageStream, CoreConfiguration, _photobucketConfiguration);
                 imageStream.Position = 0;
-                using (var streamContent = new StreamContent(imageStream))
+                using var streamContent = new StreamContent(imageStream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue(surfaceToUpload.GenerateMimeType(CoreConfiguration, _photobucketConfiguration));
+                streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
                 {
-                    streamContent.Headers.ContentType = new MediaTypeHeaderValue(surfaceToUpload.GenerateMimeType(CoreConfiguration, _photobucketConfiguration));
-                    streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-                    {
-                        Name = "\"uploadfile\"",
-                        FileName = "\"" + filename + "\""
-                    };
+                    Name = "\"uploadfile\"",
+                    FileName = "\"" + filename + "\""
+                };
 
-                    HttpBehaviour.Current.SetConfig(new HttpRequestMessageConfiguration
-                    {
-                        Properties = signedParameters
-                    });
-                    try
-                    {
-                        responseString = await uploadUri.PostAsync<string>(streamContent, token);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error().WriteLine(ex, "Error uploading to Photobucket.");
-                        throw;
-                    }
+                HttpBehaviour.Current.SetConfig(new HttpRequestMessageConfiguration
+                {
+                    Properties = signedParameters
+                });
+                try
+                {
+                    responseString = await uploadUri.PostAsync<string>(streamContent, token);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error().WriteLine(ex, "Error uploading to Photobucket.");
+                    throw;
                 }
             }
 

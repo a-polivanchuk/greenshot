@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -21,6 +21,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CliWrap;
+using CliWrap.Buffered;
 using Dapplo.Windows.Clipboard;
 using Greenshot.Addon.ExternalCommand.Configuration;
 using Greenshot.Addon.ExternalCommand.Entities;
@@ -76,11 +77,9 @@ namespace Greenshot.Addon.ExternalCommand
 
 	        var fullPath = captureDetails.Filename ?? surface.SaveNamedTmpFile(CoreConfiguration, _externalCommandConfiguration);
 
-	        var cli = new Cli(_externalCommandDefinition.Command);
-	        var arguments = string.Format(_externalCommandDefinition.Arguments, fullPath);
-	        // Execute
-	        cli.SetArguments(arguments);
-	        var output = await cli.ExecuteAsync().ConfigureAwait(true);
+            var output = await Cli.Wrap(_externalCommandDefinition.Command)
+                .WithArguments(string.Format(_externalCommandDefinition.Arguments, fullPath))
+                .ExecuteBufferedAsync().Task.ConfigureAwait(false);
 
 	        if (_externalCommandDefinition.CommandBehavior.HasFlag(CommandBehaviors.ParseOutputForUris))
 	        {
@@ -89,12 +88,10 @@ namespace Greenshot.Addon.ExternalCommand
 	            {
 	                exportInformation.Uri = uriMatches[0].Groups[1].Value;
 
-	                using (var clipboardAccessToken = ClipboardNative.Access())
-	                {
-	                    clipboardAccessToken.ClearContents();
-                        clipboardAccessToken.SetAsUrl(exportInformation.Uri);
-	                }
-	            }
+                    using var clipboardAccessToken = ClipboardNative.Access();
+                    clipboardAccessToken.ClearContents();
+                    clipboardAccessToken.SetAsUrl(exportInformation.Uri);
+                }
 	        }
 
 	        if (_externalCommandDefinition.CommandBehavior.HasFlag(CommandBehaviors.DeleteOnExit))

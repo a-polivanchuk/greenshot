@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -392,7 +392,7 @@ namespace Greenshot.Addon.InternetExplorer
 				windowToCapture = InteropWindowQuery.GetForegroundWindow();
 			}
 			// Show backgroundform after retrieving the active window..
-			var backgroundForm = new BackgroundForm("Internet Explorer", "Please wait while the page in Internet Explorer is captured...");
+			using var backgroundForm = new BackgroundForm("Internet Explorer", "Please wait while the page in Internet Explorer is captured...");
 			backgroundForm.Show();
 			//BackgroundForm backgroundForm = BackgroundForm.ShowAndWait(language.GetString(LangKey.contextmenu_captureie), language.GetString(LangKey.wait_ie_capture));
 			try
@@ -658,12 +658,10 @@ namespace Greenshot.Addon.InternetExplorer
 
 				// Loop over the frames and clear their source area so we don't see any artifacts
 				foreach (var frameDocument in documentContainer.Frames)
-				{
-					using (var brush = new SolidBrush(clearColor))
-					{
-						graphicsTarget.FillRectangle(brush, frameDocument.SourceRectangle);
-					}
-				}
+                {
+                    using var brush = new SolidBrush(clearColor);
+                    graphicsTarget.FillRectangle(brush, frameDocument.SourceRectangle);
+                }
 				// Loop over the frames and capture their content
 				foreach (var frameDocument in documentContainer.Frames)
 				{

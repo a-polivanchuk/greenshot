@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2018 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -177,11 +177,9 @@ namespace Greenshot.Addon.Imgur.ViewModels
         /// </summary>
         public void CopyToClipboard()
         {
-            using (var clipboardAccessToken = ClipboardNative.Access())
-            {
-                clipboardAccessToken.ClearContents();
-                clipboardAccessToken.SetAsUrl(SelectedImgur.Data.Link?.AbsoluteUri);
-            }
+            using var clipboardAccessToken = ClipboardNative.Access();
+            clipboardAccessToken.ClearContents();
+            clipboardAccessToken.SetAsUrl(SelectedImgur.Data.Link?.AbsoluteUri);
         }
 
         /// <summary>

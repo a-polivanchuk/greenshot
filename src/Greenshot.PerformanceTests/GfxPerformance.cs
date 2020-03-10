@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -40,11 +40,9 @@ namespace Greenshot.PerformanceTests
         {
             _unmanagedTestBitmap = new UnmanagedBitmap<Bgr32>(400, 400);
             _unmanagedTestBitmap.Span.Fill(new Bgr32 { B = 255, G = 255, R = 255, Unused = 0});
-            using (var graphics = Graphics.FromImage(_unmanagedTestBitmap.NativeBitmap))
-            using (var pen = new SolidBrush(Color.Blue))
-            {
-                graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
-            }
+            using var graphics = Graphics.FromImage(_unmanagedTestBitmap.NativeBitmap);
+            using var pen = new SolidBrush(Color.Blue);
+            graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
         }
 
         [GlobalCleanup]
@@ -60,19 +58,16 @@ namespace Greenshot.PerformanceTests
         [Arguments(PixelFormat.Format32bppArgb)]
         public void WuQuantizer(PixelFormat pixelFormat)
         {
-            using (var bitmap = BitmapFactory.CreateEmpty(400, 400, pixelFormat, Color.White))
+            using var bitmap = BitmapFactory.CreateEmpty(400, 400, pixelFormat, Color.White);
+            using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
             {
-                using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
-                using (var pen = new SolidBrush(Color.Blue))
-                {
-                    graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
-                }
-                var quantizer = new WuQuantizer(bitmap);
-                using (var quantizedImage = quantizer.GetQuantizedImage())
-                {
-                    quantizedImage.NativeBitmap.Save(@"quantized.png", ImageFormat.Png);
-                }
+                using var pen = new SolidBrush(Color.Blue);
+                graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
             }
+
+            var quantizer = new WuQuantizer(bitmap);
+            using var quantizedImage = quantizer.GetQuantizedImage();
+            quantizedImage.NativeBitmap.Save(@"quantized.png", ImageFormat.Png);
         }
 
         [Benchmark]
@@ -81,45 +76,41 @@ namespace Greenshot.PerformanceTests
         [Arguments(PixelFormat.Format32bppArgb)]
         public void Blur_FastBitmap(PixelFormat pixelFormat)
         {
-            using (var bitmap = BitmapFactory.CreateEmpty(400, 400, pixelFormat, Color.White))
+            using var bitmap = BitmapFactory.CreateEmpty(400, 400, pixelFormat, Color.White);
+            using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
             {
-                using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
-                using (var pen = new SolidBrush(Color.Blue))
-                {
-                    graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
-                }
-                bitmap.ApplyBoxBlur(10);
+                using var pen = new SolidBrush(Color.Blue);
+                graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
             }
+
+            bitmap.ApplyBoxBlur(10);
         }
 
         [Benchmark]
         public void Blur_UnmanagedBitmap()
         {
-            using (var unmanagedBitmap = new UnmanagedBitmap<Bgr32>(400, 400))
+            using var unmanagedBitmap = new UnmanagedBitmap<Bgr32>(400, 400);
+            unmanagedBitmap.Span.Fill(new Bgr32 { B = 255, G = 255, R = 255 });
+            using (var graphics = Graphics.FromImage(unmanagedBitmap.NativeBitmap))
             {
-                unmanagedBitmap.Span.Fill(new Bgr32 { B = 255, G = 255, R = 255 });
-                using (var graphics = Graphics.FromImage(unmanagedBitmap.NativeBitmap))
-                using (var pen = new SolidBrush(Color.Blue))
-                {
-                    graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
-                }
-
-                unmanagedBitmap.ApplyBoxBlur(10);
+                using var pen = new SolidBrush(Color.Blue);
+                graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
             }
+
+            unmanagedBitmap.ApplyBoxBlur(10);
         }
 
         [Benchmark]
         public void Blur_Old()
         {
-            using (var bitmap = BitmapFactory.CreateEmpty(400, 400, PixelFormat.Format32bppRgb, Color.White))
+            using var bitmap = BitmapFactory.CreateEmpty(400, 400, PixelFormat.Format32bppRgb, Color.White);
+            using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
             {
-                using (var graphics = Graphics.FromImage(bitmap.NativeBitmap))
-                using (var pen = new SolidBrush(Color.Blue))
-                {
-                    graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
-                }
-                BoxBlurOld.ApplyOldBoxBlur(bitmap, 10);
+                using var pen = new SolidBrush(Color.Blue);
+                graphics.FillRectangle(pen, new Rectangle(30, 30, 340, 340));
             }
+
+            BoxBlurOld.ApplyOldBoxBlur(bitmap, 10);
         }
 
         [Benchmark]

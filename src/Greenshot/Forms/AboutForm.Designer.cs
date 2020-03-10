@@ -1,6 +1,6 @@
 ﻿/*
  * Greenshot - a free and open source screenshot tool
- * Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+ * Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
  * 
  * For more information see: http://getgreenshot.org/
  * The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Reflection;
 using Greenshot.Addons.Controls;
 
 namespace Greenshot.Forms {
@@ -28,19 +27,6 @@ namespace Greenshot.Forms {
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
-		
-		/// <summary>
-		/// Disposes resources used by the form.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				if (components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
 		
 		/// <summary>
 		/// This method is required for Windows Forms designer support.

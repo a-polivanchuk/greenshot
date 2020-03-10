@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -66,13 +66,13 @@ namespace Greenshot.Addon.LegacyEditor
                     {
                         switch (fieldType.ValueType)
                         {
-                            case var intType when fieldType.ValueType == typeof(int):
+                            case var _ when fieldType.ValueType == typeof(int):
                                 fieldValue = Convert.ToInt32(preferredValue);
                                 break;
-                            case var boolType when fieldType.ValueType == typeof(bool):
+                            case var _ when fieldType.ValueType == typeof(bool):
                                 fieldValue = Convert.ToBoolean(preferredValue);
                                 break;
-                            case var colorType when fieldType.ValueType == typeof(Color):
+                            case var _ when fieldType.ValueType == typeof(Color):
                                 var color = Color.FromName(preferredStringValue);
                                 fieldValue = color;
                                 if (Color.Empty == color)
@@ -80,22 +80,22 @@ namespace Greenshot.Addon.LegacyEditor
                                     fieldValue = Color.FromArgb(Convert.ToInt32(preferredValue));
                                 }
                                 break;
-                            case var alignType when fieldType.ValueType == typeof(StringAlignment):
+                            case var _ when fieldType.ValueType == typeof(StringAlignment):
                                 fieldValue = Enum.Parse(typeof(StringAlignment), preferredStringValue, true);
                                 break;
-                            case var fieldFlagType when fieldType.ValueType == typeof(FieldFlag):
+                            case var _ when fieldType.ValueType == typeof(FieldFlag):
                                 fieldValue = Enum.Parse(typeof(FieldFlag), preferredStringValue, true);
                                 break;
-                            case var preparedFilterType when fieldType.ValueType == typeof(PreparedFilter):
+                            case var _ when fieldType.ValueType == typeof(PreparedFilter):
                                 fieldValue = Enum.Parse(typeof(PreparedFilter), preferredStringValue, true);
                                 break;
-                            case var arrowHeadCombinationType when fieldType.ValueType == typeof(ArrowContainer.ArrowHeadCombination):
+                            case var _ when fieldType.ValueType == typeof(ArrowContainer.ArrowHeadCombination):
                                 fieldValue = Enum.Parse(typeof(ArrowContainer.ArrowHeadCombination), preferredStringValue, true);
                                 break;
-                            case var floatType when fieldType.ValueType == typeof(float):
+                            case var _ when fieldType.ValueType == typeof(float):
                                 fieldValue = Convert.ToSingle(preferredValue, CultureInfo.InvariantCulture);
                                 break;
-                            case var doubleType when fieldType.ValueType == typeof(double):
+                            case var _ when fieldType.ValueType == typeof(double):
                                 fieldValue = Convert.ToDouble(preferredValue, CultureInfo.InvariantCulture);
                                 break;
                             default:

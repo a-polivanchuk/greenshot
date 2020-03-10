@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -75,12 +75,11 @@ namespace Greenshot.Addon.LegacyEditor.Drawing
 			{
 				return;
 			}
-			using (var fileCursor = new Cursor(filename))
-			{
-				Cursor = fileCursor;
-				Log.Debug().WriteLine("Loaded file: " + filename + " with resolution: " + Height + "," + Width);
-			}
-		}
+
+            using var fileCursor = new Cursor(filename);
+            Cursor = fileCursor;
+            Log.Debug().WriteLine("Loaded file: " + filename + " with resolution: " + Height + "," + Width);
+        }
 
 		protected override void OnDeserialized(StreamingContext streamingContext)
 		{

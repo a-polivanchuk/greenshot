@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -62,11 +62,9 @@ namespace Greenshot.Components
             // if language is not set, show language dialog
             if (string.IsNullOrEmpty(_coreConfiguration.Language))
             {
-                using (var ownedLanguageDialog = _languageDialogFactory())
-                {
-                    ownedLanguageDialog.Value.ShowDialog();
-                    _coreConfiguration.Language = ownedLanguageDialog.Value.SelectedLanguage;
-                }
+                using var ownedLanguageDialog = _languageDialogFactory();
+                ownedLanguageDialog.Value.ShowDialog();
+                _coreConfiguration.Language = ownedLanguageDialog.Value.SelectedLanguage;
             }
 
             // This makes sure the MainForm can initialize, calling show first would create the "Handle" and causing e.g. the DPI Handler to be to late.

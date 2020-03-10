@@ -1,5 +1,5 @@
 // Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -602,14 +602,14 @@ namespace Greenshot.Addon.LegacyEditor.Drawing
 		}
 
 		protected void DrawSelectionBorder(Graphics g, NativeRect rect)
-		{
-			using (var pen = new Pen(Color.MediumSeaGreen))
-			{
-				pen.DashPattern = new float[] {1, 2};
-				pen.Width = 1;
-				g.DrawRectangle(pen, rect);
-			}
-		}
+        {
+            using var pen = new Pen(Color.MediumSeaGreen)
+            {
+                DashPattern = new float[] {1, 2},
+                Width = 1
+            };
+            g.DrawRectangle(pen, rect);
+        }
 
 
 		public void ResizeTo(int width, int height)

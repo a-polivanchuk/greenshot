@@ -1,5 +1,5 @@
 ﻿// Greenshot - a free and open source screenshot tool
-// Copyright (C) 2007-2019 Thomas Braun, Jens Klingen, Robin Krom
+// Copyright (C) 2007-2020 Thomas Braun, Jens Klingen, Robin Krom
 // 
 // For more information see: http://getgreenshot.org/
 // The Greenshot project is hosted on GitHub https://github.com/greenshot/greenshot
@@ -50,23 +50,21 @@ namespace Greenshot.Gfx.Effects
 	    /// <param name="threshold">Threshold for monochrome filter (0 - 255), lower value means less black</param>
 	    /// <returns>b/w bitmap</returns>
 	    public static IBitmapWithNativeSupport CreateMonochrome(IBitmapWithNativeSupport sourceBitmap, byte threshold)
-	    {
-	        using (var fastBitmap = FastBitmapFactory.CreateCloneOf(sourceBitmap, sourceBitmap.PixelFormat))
-	        {
-	            Parallel.For(0, fastBitmap.Height, y =>
-	            {
-                    // TODO: use stackalloc / unsafe
-	                for (var x = 0; x < fastBitmap.Width; x++)
-	                {
-	                    var color = fastBitmap.GetColorAt(x, y);
-	                    var colorBrightness = (color.R + color.G + color.B) / 3 > threshold ? 255 : 0;
-	                    var monoColor = Color.FromArgb(color.A, colorBrightness, colorBrightness, colorBrightness);
-	                    fastBitmap.SetColorAt(x, y, ref monoColor);
-	                }
-	            });
-	            return fastBitmap.UnlockAndReturnBitmap();
-	        }
-	    }
+        {
+            using var fastBitmap = FastBitmapFactory.CreateCloneOf(sourceBitmap, sourceBitmap.PixelFormat);
+            Parallel.For(0, fastBitmap.Height, y =>
+            {
+                // TODO: use stackalloc / unsafe
+                for (var x = 0; x < fastBitmap.Width; x++)
+                {
+                    var color = fastBitmap.GetColorAt(x, y);
+                    var colorBrightness = (color.R + color.G + color.B) / 3 > threshold ? 255 : 0;
+                    var monoColor = Color.FromArgb(color.A, colorBrightness, colorBrightness, colorBrightness);
+                    fastBitmap.SetColorAt(x, y, ref monoColor);
+                }
+            });
+            return fastBitmap.UnlockAndReturnBitmap();
+        }
 
 
     }
