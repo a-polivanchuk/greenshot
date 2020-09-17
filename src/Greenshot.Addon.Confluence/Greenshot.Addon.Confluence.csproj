@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Greenshot.Addon.Confluence</RootNamespace>
     <AssemblyName>Greenshot.Addon.Confluence</AssemblyName>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +24,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Dapplo.Confluence" Version="0.9.7" />
+    <PackageReference Include="Dapplo.Confluence" Version="1.0.16" />
   </ItemGroup>
 </Project>

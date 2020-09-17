@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -28,19 +28,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
-    <PackageReference Include="CommandLineParser" Version="2.7.82" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="Dapplo.Log.XUnit" Version="1.3.26" />
-    <PackageReference Include="Dapplo.Windows" Version="0.11.15" />
+    <PackageReference Include="Dapplo.Windows" Version="0.11.17" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.analyzers" Version="0.10.0" />
     <PackageReference Include="xunit.core" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Xunit.StaFact" Version="0.3.18" />
+    <PackageReference Include="Xunit.StaFact" Version="1.0.37" />
   </ItemGroup>
   
   <ItemGroup>
@@ -51,6 +52,9 @@
   </ItemGroup>
   
   <ItemGroup>
+    <None Update="TestFiles\paiS7wOGKN0XA1wIaq8qHNoWQqq64wnFu3svA9Ux.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestFiles\scroll-result.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
